@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulário de Tarefa</title>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-xl mx-auto">
+        <h1 class="text-xl font-semibold mb-4">Formulário de Tarefa</h1>
+
+        <form th:action="@{/tarefas}" method="post" th:object="${tarefa}" class="bg-white p-6 shadow rounded space-y-4">
+            <input type="hidden" th:field="*{id}"/>
+
+            <div>
+                <label class="block text-sm font-medium">Título</label>
+                <input type="text" th:field="*{titulo}" class="w-full border px-3 py-2 rounded" required />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium">Descrição</label>
+                <textarea th:field="*{descricao}" class="w-full border px-3 py-2 rounded"></textarea>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium">Status</label>
+                <select th:field="*{status}" class="w-full border px-3 py-2 rounded">
+                    <option value="PENDENTE">Pendente</option>
+                    <option value="EM_ANDAMENTO">Em andamento</option>
+                    <option value="CONCLUIDA">Concluída</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium">Prazo</label>
+                <input type="date" th:field="*{prazo}" class="w-full border px-3 py-2 rounded" required />
+            </div>
+
+            <div class="flex justify-end">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Salvar</button>
+                <a href="/tarefas" class="ml-2 text-gray-600 hover:underline">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

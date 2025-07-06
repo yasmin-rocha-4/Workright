@@ -1,11 +1,17 @@
+-- Criação da tabela usuario
 CREATE TABLE usuario (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(255),
-    email VARCHAR(255),
-    senha VARCHAR(255),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL,
     papel VARCHAR(50)
 );
 
+-- Inserção do usuário admin
+INSERT INTO usuario (nome, email, senha, papel)
+VALUES ('Admin', 'admin@admin.com', '123456789012', 'ADMIN');
+
+-- Criação da tabela tarefa
 CREATE TABLE tarefa (
     id SERIAL PRIMARY KEY,
     titulo VARCHAR(255),
@@ -15,6 +21,7 @@ CREATE TABLE tarefa (
     usuario_id BIGINT REFERENCES usuario(id)
 );
 
+-- Criação da tabela sessao_pomodoro
 CREATE TABLE sessao_pomodoro (
     id SERIAL PRIMARY KEY,
     duracao INT,
@@ -25,6 +32,7 @@ CREATE TABLE sessao_pomodoro (
     tarefa_id BIGINT REFERENCES tarefa(id)
 );
 
+-- Criação da tabela historico
 CREATE TABLE historico (
     id SERIAL PRIMARY KEY,
     usuario_id BIGINT REFERENCES usuario(id),

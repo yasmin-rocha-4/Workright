@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tarefas</title>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold mb-4">Lista de Tarefas</h1>
+        <a href="/tarefas/nova" class="bg-blue-600 text-white px-4 py-2 rounded">Nova Tarefa</a>
+
+        <table class="w-full mt-6 bg-white shadow rounded">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="p-2 text-left">Título</th>
+                    <th class="p-2 text-left">Prazo</th>
+                    <th class="p-2 text-left">Status</th>
+                    <th class="p-2">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="tarefa : ${tarefas}" class="border-b hover:bg-gray-50">
+                    <td class="p-2" th:text="${tarefa.titulo}"></td>
+                    <td class="p-2" th:text="${tarefa.prazo}"></td>
+                    <td class="p-2" th:text="${tarefa.status}"></td>
+                    <td class="p-2 text-center">
+                        <a th:href="@{'/tarefas/editar/' + ${tarefa.id}}" class="text-blue-600 hover:underline">Editar</a>
+                        <a th:href="@{'/tarefas/excluir/' + ${tarefa.id}}" class="text-red-600 hover:underline ml-2">Excluir</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
