@@ -1,6 +1,6 @@
 -- Criação da tabela usuario
 CREATE TABLE usuario (
-    id SERIAL PRIMARY KEY,
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nome VARCHAR(255),
     email VARCHAR(255) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL,
@@ -13,7 +13,7 @@ VALUES ('Admin', 'admin@admin.com', '123456789012', 'ADMIN');
 
 -- Criação da tabela tarefa
 CREATE TABLE tarefa (
-    id SERIAL PRIMARY KEY,
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     titulo VARCHAR(255),
     descricao TEXT,
     status VARCHAR(50),
@@ -23,7 +23,7 @@ CREATE TABLE tarefa (
 
 -- Criação da tabela sessao_pomodoro
 CREATE TABLE sessao_pomodoro (
-    id SERIAL PRIMARY KEY,
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     duracao INT,
     pausas INT,
     ciclos INT,
@@ -34,7 +34,7 @@ CREATE TABLE sessao_pomodoro (
 
 -- Criação da tabela historico
 CREATE TABLE historico (
-    id SERIAL PRIMARY KEY,
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     usuario_id BIGINT REFERENCES usuario(id),
     tarefa_id BIGINT REFERENCES tarefa(id),
     data DATE,

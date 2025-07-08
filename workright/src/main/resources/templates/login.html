@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <form method="post" action="/login" class="bg-white p-6 rounded shadow w-96">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <h1 class="text-xl font-bold mb-4">Login</h1>
+
+        <label class="block mb-2 text-sm">Email:</label>
+        <input type="text" name="username" class="w-full p-2 border rounded mb-4" required />
+
+        <label class="block mb-2 text-sm">Senha:</label>
+        <input type="password" name="password" class="w-full p-2 border rounded mb-4" required />
+
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded w-full">Entrar</button>
+
+        <p th:if="${param.error}" class="text-red-500 mt-4">Login ou senha inválidas</p>
+        <p th:if="${param.logout}" class="text-green-500 mt-4">Logout realizado com sucesso</p>
+    </form>
+</body>
+</html>
