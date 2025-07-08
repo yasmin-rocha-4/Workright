@@ -15,6 +15,7 @@ public class Tarefa {
     private LocalDate prazo;
 
     @ManyToOne
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     @OneToMany(mappedBy = "tarefa")
