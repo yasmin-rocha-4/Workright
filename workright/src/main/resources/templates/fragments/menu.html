@@ -1,0 +1,15 @@
+<!-- fragments/menu.html -->
+<div th:fragment="body">
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+        <div class="text-xl font-bold text-blue-600">WorkRight</div>
+        <nav class="flex gap-4 items-center">
+            <a href="/tarefas" class="text-gray-700 hover:text-blue-600">Tarefas</a>
+            <a href="/pomodoro" class="text-gray-700 hover:text-blue-600">Sessão Pomodoro</a>
+            <a href="/historico" class="text-gray-700 hover:text-blue-600">Histórico</a>
+            <span class="text-gray-500">Olá, <span th:text="${#authentication.name}">Usuário</span>!</span>
+            <form th:action="@{/logout}" method="post" class="inline">
+                <button type="submit" class="text-red-600 hover:underline">Sair</button>
+            </form>
+        </nav>
+    </header>
+</div>

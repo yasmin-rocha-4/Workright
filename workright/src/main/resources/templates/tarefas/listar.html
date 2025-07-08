@@ -2,12 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Tarefas</title>
+    <title>Lista de Tarefas</title>
     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 p-6">
-    <div class="max-w-4xl mx-auto">
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- Inclui o menu -->
+    <div th:replace="fragments/menu :: body"></div>
+
+    <!-- Conteúdo principal -->
+    <main class="p-6 max-w-4xl mx-auto">
         <h1 class="text-2xl font-bold mb-4">Lista de Tarefas</h1>
         <a href="/tarefas/nova" class="bg-blue-600 text-white px-4 py-2 rounded">Nova Tarefa</a>
 
@@ -17,7 +22,7 @@
                     <th class="p-2 text-left">Título</th>
                     <th class="p-2 text-left">Prazo</th>
                     <th class="p-2 text-left">Status</th>
-                    <th class="p-2">Ações</th>
+                    <th class="p-2 text-center">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,6 +37,7 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+    </main>
+
 </body>
 </html>

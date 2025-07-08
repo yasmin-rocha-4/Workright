@@ -40,22 +40,25 @@ public class TarefaController {
     @GetMapping("/nova")
     public String novaTarefa(Model model) {
         model.addAttribute("tarefa", new Tarefa());
+        model.addAttribute("usuario", usuarioAutenticadoProvider.getUsuarioAutenticado());
         return "tarefas/formulario";
     }
 
     @PostMapping
     public String salvar(@Valid Tarefa tarefa, BindingResult result, Model model) {
-    if (result.hasErrors()) {
-        return "tarefas/formulario";
+        if (result.hasErrors()) {
+            model.addAttribute("usuario", usuarioAutenticadoProvider.getUsuarioAutenticado());
+            return "tarefas/formulario";
+        }
+        tarefaService.criarTarefa(tarefa);
+        return "redirect:/tarefas";
     }
-    tarefaService.criarTarefa(tarefa); 
-    return "redirect:/tarefas";
-}
 
 
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
         model.addAttribute("tarefa", tarefaService.buscarPorId(id));
+        model.addAttribute("usuario", usuarioAutenticadoProvider.getUsuarioAutenticado());
         return "tarefas/formulario";
     }
 

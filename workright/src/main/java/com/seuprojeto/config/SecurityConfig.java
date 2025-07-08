@@ -21,28 +21,26 @@ public class SecurityConfig {
     }
 
     @Bean
-public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http
-        .authorizeHttpRequests(authz -> authz
-            .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-            .requestMatchers("/login", "/").permitAll()
-            .anyRequest().authenticated()
-        )
-        .authenticationProvider(authenticationProvider()) // <<< Aqui!
-        .formLogin(form -> form
-            .loginPage("/login")
-            .defaultSuccessUrl("/tarefas", true)
-            .failureUrl("/login?error")
-            .permitAll()
-        )
-        .logout(logout -> logout
-            .logoutSuccessUrl("/login?logout")
-            .permitAll()
-        );
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                .requestMatchers("/login", "/").permitAll()
+                .anyRequest().authenticated()
+            )
+            .formLogin(form -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/tarefas", true)
+                .failureUrl("/login?error")
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutSuccessUrl("/login?logout")
+                .permitAll()
+            );
 
-    return http.build();
-}
-
+        return http.build();
+    }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
