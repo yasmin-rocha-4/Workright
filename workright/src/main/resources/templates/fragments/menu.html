@@ -1,25 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-    <div th:fragment="body">
-        <nav class="bg-blue-600 text-white p-4 flex justify-between">
-            <div>
-                <a href="/tarefas" class="mr-4">Tarefas</a>
-                <a href="/pomodoro" class="mr-4">Pomodoro</a>
-                <a href="/historico" class="mr-4">Histórico</a>
-                <span th:if="${usuario != null}">
-                    <a th:href="@{'/usuarios/editar/' + ${usuario.id}}" th:text="${usuario.email}">Perfil</a>
-                </span>
-                <span th:if="${usuario == null}" class="text-gray-500 italic">
-                    Carregando...
-                </span>
+<div th:fragment="body">
+    <nav class="bg-blue-700 text-white px-6 py-4 flex justify-between items-center shadow">
+        <!-- Logo e links -->
+        <div class="flex items-center space-x-6">
+            <a href="/" class="text-xl font-bold tracking-wide">WorkRight</a>
+            <a href="/tarefas" class="hover:underline">Tarefas</a>
+            <a href="/pomodoro" class="hover:underline">Pomodoro</a>
+            <a href="/historico" class="hover:underline">Histórico</a>
+        </div>
 
-            </div>
-            <form method="post" action="/logout" th:object="${#httpServletRequest}">
+        <!-- Usuário e logout -->
+        <div class="flex items-center space-x-4">
+            <span th:if="${usuario != null}">
+                <a th:href="@{'/usuarios/editar/' + ${usuario.id}}" 
+                   th:text="${usuario.nome}" 
+                   class="hover:underline font-medium"></a>
+            </span>
+            <span th:if="${usuario == null}" class="italic text-gray-300">Carregando...</span>
+
+            <form method="post" action="/logout">
                 <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-                <button type="submit" class="ml-4">Sair</button>
+                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">
+                    Sair
+                </button>
             </form>
-        </nav>
-    </div>
+        </div>
+    </nav>
+</div>
 </body>
 </html>
