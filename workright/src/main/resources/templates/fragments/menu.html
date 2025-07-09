@@ -1,15 +1,25 @@
-<!-- fragments/menu.html -->
-<div th:fragment="body">
-    <header class="bg-white shadow p-4 flex justify-between items-center">
-        <div class="text-xl font-bold text-blue-600">WorkRight</div>
-        <nav class="flex gap-4 items-center">
-            <a href="/tarefas" class="text-gray-700 hover:text-blue-600">Tarefas</a>
-            <a href="/pomodoro" class="text-gray-700 hover:text-blue-600">Sessão Pomodoro</a>
-            <a href="/historico" class="text-gray-700 hover:text-blue-600">Histórico</a>
-            <span class="text-gray-500">Olá, <span th:text="${#authentication.name}">Usuário</span>!</span>
-            <form th:action="@{/logout}" method="post" class="inline">
-                <button type="submit" class="text-red-600 hover:underline">Sair</button>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="body">
+        <nav class="bg-blue-600 text-white p-4 flex justify-between">
+            <div>
+                <a href="/tarefas" class="mr-4">Tarefas</a>
+                <a href="/pomodoro" class="mr-4">Pomodoro</a>
+                <a href="/historico" class="mr-4">Histórico</a>
+                <span th:if="${usuario != null}">
+                    <a th:href="@{'/usuarios/editar/' + ${usuario.id}}" th:text="${usuario.email}">Perfil</a>
+                </span>
+                <span th:if="${usuario == null}" class="text-gray-500 italic">
+                    Carregando...
+                </span>
+
+            </div>
+            <form method="post" action="/logout" th:object="${#httpServletRequest}">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                <button type="submit" class="ml-4">Sair</button>
             </form>
         </nav>
-    </header>
-</div>
+    </div>
+</body>
+</html>

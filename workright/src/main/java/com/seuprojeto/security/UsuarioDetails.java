@@ -16,8 +16,14 @@ public class UsuarioDetails implements UserDetails {
         this.usuario = usuario;
     }
 
+    // Retorna o objeto Usuario para reautenticação ou uso em outras partes da aplicação
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Exemplo: ROLE_USER, ROLE_ADMIN
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + usuario.getPapel()));
     }
 
