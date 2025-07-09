@@ -5,7 +5,9 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
-    <form th:action="@{/usuarios/editar/{id}(id=${usuario.id})}" th:object="${usuario}" method="post" class="bg-white p-6 rounded shadow w-full max-w-md" novalidate>
+    <form th:action="@{/usuarios/editar/{id}(id=${usuario.id})}" th:object="${usuario}" method="post"
+      onsubmit="return verificarSenha()" class="bg-white p-6 rounded shadow w-full max-w-md">
+
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
         <h2 class="text-2xl font-bold mb-6">Editar Usuário</h2>
@@ -21,5 +23,15 @@
 
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700 transition">Salvar</button>
     </form>
+    <script>
+    function verificarSenha() {
+        const senhaInput = document.querySelector('input[name="senha"]');
+        if (senhaInput && senhaInput.value.trim() === '') {
+            senhaInput.disabled = true;  // campo não será enviado
+        }
+        return true;
+    }
+</script>
+
 </body>
 </html>
