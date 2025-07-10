@@ -67,9 +67,8 @@ public class TarefaController {
             Usuario usuario = usuarioAutenticadoProvider.getUsuarioAutenticado();
             tarefa.setUsuario(usuario);
             
-            // Salva no banco
-            Tarefa tarefaSalva = tarefaService.salvarTarefa(tarefa);
-            return "redirect:/tarefas/editar/" + tarefaSalva.getId();
+            tarefaService.salvar(tarefa);
+            return "redirect:/tarefas/editar/" + tarefa.getId();
             
         } catch (Exception e) {
             model.addAttribute("erro", "Erro ao salvar tarefa: " + e.getMessage());

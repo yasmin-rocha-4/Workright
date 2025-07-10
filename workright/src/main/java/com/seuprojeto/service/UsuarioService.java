@@ -36,4 +36,8 @@ public class UsuarioService {
     public void excluir(Long id) {
         usuarioRepository.deleteById(id);
     }
+    public Usuario findByEmail(String email) {
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    }
 }

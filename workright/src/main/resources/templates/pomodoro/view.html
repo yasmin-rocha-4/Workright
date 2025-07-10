@@ -31,8 +31,13 @@
         <div class="flex justify-between">
             <a th:href="@{/tarefas}" class="text-blue-600 hover:underline">Voltar para Tarefas</a>
 
-            <a th:href="@{'/sessoes/concluir/' + ${sessao.id}}" 
-               class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Concluir Sessão</a>
+            <form th:action="@{'/sessoes/concluir/' + ${sessao.id}}" method="post" style="display:inline;">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                <button type="submit"
+                        class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                    Concluir Sessão
+                </button>
+            </form>
         </div>
     </div>
 

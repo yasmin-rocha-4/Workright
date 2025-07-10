@@ -14,7 +14,9 @@ public class Historico {
     private Usuario usuario;
 
     @ManyToOne
+    @JoinColumn(name = "tarefa_id")
     private Tarefa tarefa;
+
 
     private LocalDate data;
     private int totalHoras;

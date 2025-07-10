@@ -19,9 +19,13 @@ public class Tarefa {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-   @OneToMany(mappedBy = "tarefa", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tarefa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("id DESC") // para pegar a última
     private List<SessaoPomodoro> sessoes;
+
+    @OneToMany(mappedBy = "tarefa", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Historico> historicos;
+
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

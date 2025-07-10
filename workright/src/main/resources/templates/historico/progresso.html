@@ -1,0 +1,11 @@
+<div th:fragment="progresso-fragment" class="progresso-card">
+    <h3>Progresso Diário</h3>
+    <p>Data: <span th:text="${progresso.data}"></span></p>
+    <p>Total de horas: <span th:text="${progresso.totalHoras}"></span></p>
+    <p th:if="${progresso.metaAtingida}" class="success">Meta atingida! 🎉</p>
+    <p th:unless="${progresso.metaAtingida}" class="warning">Continue trabalhando!</p>
+    
+    <div class="progress-bar">
+        <div th:style="'width:' + ${progresso.totalHoras / 8 * 100} + '%'"></div>
+    </div>
+</div>
