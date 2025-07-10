@@ -12,7 +12,7 @@ public class LoginController {
 
 public String loginPage(@RequestParam(required = false) String error, Model model) {
     System.out.println("Parâmetro error recebido: " + error);
-    return "login"; // nome do seu template login.html
+    return "login"; 
 }
 
     public String login(

@@ -10,5 +10,5 @@ import com.seuprojeto.model.Usuario;
 
 public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
     List<Tarefa> findByUsuario(Usuario usuario);
-    Optional<Tarefa> findByIdAndUsuario(Long id, Usuario usuario); // Adicione este método
+    Optional<Tarefa> findByIdAndUsuario(Long id, Usuario usuario); 
 }

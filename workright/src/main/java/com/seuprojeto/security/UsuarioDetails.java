@@ -23,7 +23,7 @@ public class UsuarioDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Exemplo: ROLE_USER, ROLE_ADMIN
+        
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + usuario.getPapel()));
     }
 
