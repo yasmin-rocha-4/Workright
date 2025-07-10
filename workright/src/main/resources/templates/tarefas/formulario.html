@@ -1,30 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Formulário de Tarefa</title>
     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
 </head>
-<body class="bg-gray-100 p-6">
-    <div class="max-w-xl mx-auto">
-        <h1 class="text-xl font-semibold mb-4">Formulário de Tarefa</h1>
+<body class="bg-gray-100 p-6 min-h-screen">
 
-        <form th:action="@{/tarefas}" method="post" th:object="${tarefa}" class="bg-white p-6 shadow rounded space-y-4">
-            <input type="hidden" th:field="*{id}"/>
+    
+
+    <div class="max-w-xl mx-auto bg-white p-6 shadow rounded">
+        <div th:if="${tarefa != null}" class="hidden">
+            ID da Tarefa: <span th:text="${tarefa.id}"></span>
+        </div>
+
+        <h1 class="text-2xl font-semibold mb-6">Formulário de Tarefa</h1>
+
+        <form th:action="@{/tarefas}" method="post" th:object="${tarefa}" class="space-y-4">
+            <input type="hidden" th:field="*{id}" />
 
             <div>
-                <label class="block text-sm font-medium">Título</label>
+                <label class="block text-sm font-medium mb-1">Título</label>
                 <input type="text" th:field="*{titulo}" class="w-full border px-3 py-2 rounded" required />
             </div>
 
             <div>
-                <label class="block text-sm font-medium">Descrição</label>
+                <label class="block text-sm font-medium mb-1">Descrição</label>
                 <textarea th:field="*{descricao}" class="w-full border px-3 py-2 rounded"></textarea>
             </div>
 
             <div>
-                <label class="block text-sm font-medium">Status</label>
+                <label class="block text-sm font-medium mb-1">Status</label>
                 <select th:field="*{status}" class="w-full border px-3 py-2 rounded">
                     <option value="PENDENTE">Pendente</option>
                     <option value="EM_ANDAMENTO">Em andamento</option>
@@ -33,18 +40,41 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium">Prazo</label>
+                <label class="block text-sm font-medium mb-1">Prazo</label>
                 <input type="date" th:field="*{prazo}" class="w-full border px-3 py-2 rounded" required />
             </div>
-            <div>
-                Usuário atual: <span th:text="${usuario.nome}"></span>
+
+            <div class="flex justify-between items-center mt-4">
+                <div>
+                    <span>Usuário atual: <strong th:text="${usuario.nome}">Usuário</strong></span>
+                </div>
+
+            
             </div>
 
-            <div class="flex justify-end">
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Salvar</button>
-                <a href="/tarefas" class="ml-2 text-gray-600 hover:underline">Cancelar</a>
+            <div class="flex justify-end mt-6 space-x-2">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Salvar Tarefa
+                </button>
+                <a href="/tarefas" class="text-gray-600 hover:underline">Cancelar</a>
+                
+                <!-- Botão Criar Sessão -->
+                <div class="mt-4">
+                    <a th:href="@{'/sessoes/nova/' + ${tarefa.id}}" 
+                    th:if="${tarefa.id != null and tarefa.status != 'CONCLUIDA'}"
+                    class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                        Criar Sessão Pomodoro
+                    </a>
+                </div>
             </div>
+
         </form>
+
+        <span th:unless="${tarefa != null && tarefa.id != null}" 
+            class="text-red-500">Tarefa inválida</span>
+
     </div>
+    <div id="sessao-form-container" class="mt-8"></div>
+
 </body>
 </html>

@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-WorkrightApplication<workright>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.seuprojeto.WorkrightApplication",
+            "projectName": "workright",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

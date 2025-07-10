@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nova Sessão Pomodoro</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow">
+        <h1 class="text-2xl font-bold mb-4">Nova Sessão Pomodoro</h1>
+        
+        <form th:action="@{/sessoes/salvar}" method="post" th:object="${sessao}">
+            <input type="hidden" th:field="*{tarefa.id}"/>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Duração (minutos)</label>
+                <input type="number" th:field="*{duracao}" class="w-full p-2 border rounded" min="1" value="25" required>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Pausa (minutos)</label>
+                <input type="number" th:field="*{pausas}" class="w-full p-2 border rounded" min="0" value="5" required>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Ciclos</label>
+                <input type="number" th:field="*{ciclos}" class="w-full p-2 border rounded" min="1" value="4" required>
+            </div>
+            
+            <div class="flex justify-between">
+                <a th:href="@{'/tarefas/editar/' + ${sessao.tarefa.id}}" 
+                   class="text-blue-600 hover:underline">Voltar</a>
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                    Criar Sessão
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

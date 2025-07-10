@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Minhas Sessões Pomodoro</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen p-6">
+
+<!-- Menu -->
+<div th:replace="fragments/menu :: body"></div>
+
+<main class="max-w-4xl mx-auto mt-6">
+    <h1 class="text-2xl font-bold mb-4">Minhas Sessões Pomodoro</h1>
+
+    <table class="w-full bg-white rounded shadow">
+        <thead class="bg-blue-100 text-left">
+            <tr>
+                <th class="p-2">Tarefa</th>
+                <th class="p-2">Duração</th>
+                <th class="p-2">Pausas</th>
+                <th class="p-2">Ciclos</th>
+                <th class="p-2">Status</th>
+                <th class="p-2 text-center">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="sessao : ${sessoes}" class="border-t hover:bg-gray-50">
+                <td class="p-2" th:text="${sessao.tarefa.titulo}">Título da Tarefa</td>
+                <td class="p-2" th:text="${sessao.duracao + ' min'}"></td>
+                <td class="p-2" th:text="${sessao.pausas + ' min'}"></td>
+                <td class="p-2" th:text="${sessao.ciclos}"></td>
+                <td class="p-2" th:text="${sessao.status}"></td>
+                <td class="p-2 text-center">
+                    <a th:href="@{/sessoes/pomodoro/view/{id}(id=${sessao.id})}"
+                    class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+                        Ver Cronômetro
+                    </a>
+                    <a th:href="@{/sessoes/excluir/{id}(id=${sessao.id})}"
+                    class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 ml-2"
+                    onclick="return confirm('Tem certeza que deseja excluir esta sessão?');">
+                        Excluir
+                    </a>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+
+    <div th:if="${sessoes.isEmpty()}" class="mt-4 text-gray-500 text-center">
+        Nenhuma sessão encontrada.
+    </div>
+</main>
+
+</body>
+</html>

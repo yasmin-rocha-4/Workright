@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Lista de Tarefas</title>
     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
 </head>
 <body class="bg-gray-100 min-h-screen">
 
@@ -22,6 +22,7 @@
                     <th class="p-2 text-left">Título</th>
                     <th class="p-2 text-left">Prazo</th>
                     <th class="p-2 text-left">Status</th>
+                    <th class="p-2 text-center">Sessão Pomodoro</th>
                     <th class="p-2 text-center">Ações</th>
                 </tr>
             </thead>
@@ -31,12 +32,19 @@
                     <td class="p-2" th:text="${tarefa.prazo}"></td>
                     <td class="p-2" th:text="${tarefa.status}"></td>
                     <td class="p-2 text-center">
+                        <td class="p-2 text-center" th:text="${#lists.isEmpty(tarefa.sessoes) ? 'Sem sessão' : tarefa.sessoes[0].status}">
+                    </td>
+
+                    <td class="p-2 text-center">
                         <a th:href="@{'/tarefas/editar/' + ${tarefa.id}}" class="text-blue-600 hover:underline">Editar</a>
                         <a th:href="@{'/tarefas/excluir/' + ${tarefa.id}}" class="text-red-600 hover:underline ml-2">Excluir</a>
                     </td>
                 </tr>
             </tbody>
         </table>
+
+
+
     </main>
 
 </body>

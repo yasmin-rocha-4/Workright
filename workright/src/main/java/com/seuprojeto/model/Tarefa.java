@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+
 @Entity
 public class Tarefa {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +19,8 @@ public class Tarefa {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "tarefa")
+   @OneToMany(mappedBy = "tarefa", cascade = CascadeType.ALL)
+    @OrderBy("id DESC") // para pegar a última
     private List<SessaoPomodoro> sessoes;
 
     public Long getId() { return id; }

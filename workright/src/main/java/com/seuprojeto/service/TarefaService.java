@@ -15,26 +15,30 @@ public class TarefaService {
     private final UsuarioAutenticadoProvider usuarioAutenticadoProvider;
 
     public TarefaService(TarefaRepository tarefaRepository,
-                         UsuarioAutenticadoProvider usuarioAutenticadoProvider) {
+                       UsuarioAutenticadoProvider usuarioAutenticadoProvider) {
         this.tarefaRepository = tarefaRepository;
         this.usuarioAutenticadoProvider = usuarioAutenticadoProvider;
     }
 
-    public List<Tarefa> listarPorUsuario(Usuario usuario) {
-    return tarefaRepository.findByUsuario(usuario);
-}
-
     public Tarefa buscarPorId(Long id) {
-        return tarefaRepository.findById(id).orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+        return tarefaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+    }
+
+    public List<Tarefa> listarPorUsuario(Usuario usuario) {
+        return tarefaRepository.findByUsuario(usuario);
+    }
+
+    public Tarefa salvarTarefa(Tarefa tarefa) {
+        Usuario usuario = usuarioAutenticadoProvider.getUsuarioAutenticado();
+        tarefa.setUsuario(usuario);
+        return tarefaRepository.save(tarefa);
     }
 
     public void excluir(Long id) {
-        tarefaRepository.deleteById(id);
-    }
-
-    public void criarTarefa(Tarefa tarefa) {
         Usuario usuario = usuarioAutenticadoProvider.getUsuarioAutenticado();
-        tarefa.setUsuario(usuario);
-        tarefaRepository.save(tarefa);
+        Tarefa tarefa = tarefaRepository.findByIdAndUsuario(id, usuario)
+                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+        tarefaRepository.delete(tarefa);
     }
 }
