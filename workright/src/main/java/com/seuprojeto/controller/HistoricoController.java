@@ -37,7 +37,7 @@ public class HistoricoController {
             return "historico/lista";
         } catch (Exception e) {
             model.addAttribute("error", "Erro ao carregar histórico");
-            return "error"; // Crie uma página error.html
+            return "error";
         }
     }
 

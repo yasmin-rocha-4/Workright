@@ -1,40 +1,41 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Sessão Pomodoro</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-gray-100 p-6">
     <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow">
         <h1 class="text-2xl font-bold mb-4">Sessão Pomodoro</h1>
-        
+
         <div class="mb-4">
             <h2 class="text-xl font-semibold">Configuração:</h2>
             <p>Duração: <span th:text="${sessao.duracao}"></span> minutos</p>
             <p>Pausa: <span th:text="${sessao.pausas}"></span> minutos</p>
             <p>Ciclos: <span th:text="${sessao.ciclos}"></span></p>
         </div>
-        
+
         <div class="mb-4">
             <h2 class="text-xl font-semibold">Status:</h2>
             <p th:text="${sessao.status}"></p>
             <p th:text="${sessao.horaInicio}"></p>
         </div>
-        
+
         <div class="mb-4 text-center">
             <div id="timer" class="text-4xl font-bold my-4">25:00</div>
             <button onclick="startTimer()" class="bg-green-600 text-white px-4 py-2 rounded">Iniciar</button>
             <button onclick="pauseTimer()" class="bg-yellow-500 text-white px-4 py-2 rounded ml-2">Pausar</button>
         </div>
-        
+
         <div class="flex justify-between">
             <a th:href="@{/tarefas}" class="text-blue-600 hover:underline">Voltar para Tarefas</a>
 
             <form th:action="@{'/sessoes/concluir/' + ${sessao.id}}" method="post" style="display:inline;">
-                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-                <button type="submit"
-                        class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+
+                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
                     Concluir Sessão
                 </button>
             </form>
@@ -46,26 +47,26 @@
         const duration = /*[[${sessao.duracao}]]*/ 25;
         const breakTime = /*[[${sessao.pausas}]]*/ 5;
         const cycles = /*[[${sessao.ciclos}]]*/ 4;
-        
+
         let timeLeft = duration * 60;
         let currentCycle = 1;
         let isBreak = false;
         let timerInterval;
-        
+
         function updateDisplay() {
             const minutes = Math.floor(timeLeft / 60);
             const seconds = timeLeft % 60;
-            document.getElementById('timer').textContent = 
+            document.getElementById('timer').textContent =
                 `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
-        
+
         function startTimer() {
             if (timerInterval) return;
-            
+
             timerInterval = setInterval(() => {
                 timeLeft--;
                 updateDisplay();
-                
+
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
                     if (!isBreak) {
@@ -89,15 +90,16 @@
                 }
             }, 1000);
         }
-        
+
         function pauseTimer() {
             clearInterval(timerInterval);
             timerInterval = null;
         }
-        
+
         updateDisplay();
         /*]]>*/
-        
+
     </script>
 </body>
+
 </html>

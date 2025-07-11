@@ -16,14 +16,14 @@ public class UsuarioAutenticadoProvider {
     }
 
     public Usuario getUsuarioAutenticado() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null || !authentication.isAuthenticated()
-            || "anonymousUser".equals(authentication.getPrincipal())) {
+        if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
             return null;
         }
 
-        String email = authentication.getName();
+        String email = auth.getName();
         return usuarioRepository.findByEmail(email).orElse(null);
     }
+
 }

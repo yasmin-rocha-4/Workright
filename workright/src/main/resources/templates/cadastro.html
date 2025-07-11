@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <form th:action="@{/usuarios/cadastro}" method="post" th:object="${usuarioForm}"
+        class="bg-white p-6 rounded shadow w-96">
+
+
+        <h1 class="text-xl font-bold mb-4">Cadastro de Usuário</h1>
+
+        <label class="block mb-2 text-sm">Nome:</label>
+        <input type="text" th:field="*{nome}" class="w-full p-2 border rounded mb-4" required />
+
+        <label class="block mb-2 text-sm">Email:</label>
+        <input type="email" th:field="*{email}" class="w-full p-2 border rounded mb-4" required />
+
+        <label class="block mb-2 text-sm">Senha:</label>
+        <input type="password" th:field="*{senha}" class="w-full p-2 border rounded mb-4" required />
+
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded w-full">Cadastrar</button>
+
+        <p class="mt-4 text-center text-sm">
+            Já tem uma conta?
+            <a th:href="@{/login}" class="text-blue-600 hover:underline">Faça login</a>
+        </p>
+    </form>
+</body>
+
+</html>

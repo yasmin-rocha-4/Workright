@@ -1,4 +1,4 @@
-package com.seuprojeto.config;  
+package com.seuprojeto.config;
 
 import com.seuprojeto.model.Usuario;
 import com.seuprojeto.security.UsuarioAutenticadoProvider;
@@ -14,7 +14,11 @@ public class GlobalControllerAdvice {
 
     @ModelAttribute("usuario")
     public Usuario adicionaUsuarioAutenticado() {
-        // Retorna o usuário autenticado para todas as views (templates)
-        return usuarioAutenticadoProvider.getUsuarioAutenticado();
+        try {
+            return usuarioAutenticadoProvider.getUsuarioAutenticado();
+        } catch (Exception e) {
+            return null;
+        }
     }
+
 }
