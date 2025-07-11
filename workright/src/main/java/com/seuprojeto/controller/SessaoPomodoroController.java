@@ -21,6 +21,7 @@ import com.seuprojeto.security.UsuarioAutenticadoProvider;
 import com.seuprojeto.service.HistoricoService;
 import com.seuprojeto.service.SessaoPomodoroService;
 import com.seuprojeto.service.TarefaService;
+
 @Controller
 @RequestMapping("/sessoes")
 public class SessaoPomodoroController {
@@ -62,7 +63,7 @@ public class SessaoPomodoroController {
         Usuario usuario = usuarioAutenticadoProvider.getUsuarioAutenticado();
         List<SessaoPomodoro> sessoes = sessaoService.listarPorUsuario(usuario);
         model.addAttribute("sessoes", sessoes);
-        return "pomodoro/listar"; 
+        return "pomodoro/listar";
     }
 
     @PostMapping("/salvar")
@@ -86,19 +87,21 @@ public class SessaoPomodoroController {
     public String concluirSessao(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             SessaoPomodoro sessao = sessaoService.buscarPorId(id);
-
             sessao.setStatus("CONCLUIDA");
             sessaoService.salvar(sessao);
 
+            // Verifica se a tarefa já foi concluída
+            if ("CONCLUIDA".equalsIgnoreCase(sessao.getTarefa().getStatus())) {
+                historicoService.registrarConclusaoSessao(sessao);
+            }
+
             redirectAttributes.addFlashAttribute("success", "Sessão concluída com sucesso!");
             return "redirect:/tarefas";
-
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Erro ao concluir sessão: " + e.getMessage());
             return "redirect:/sessoes/pomodoro/view/" + id;
         }
     }
-
 
     @GetMapping("/excluir/{id}")
     public String excluirSessao(@PathVariable Long id, RedirectAttributes redirectAttributes) {

@@ -1,3 +1,4 @@
+// HistoricoService.java (refatorado)
 package com.seuprojeto.service;
 
 import java.time.LocalDate;
@@ -22,35 +23,45 @@ public class HistoricoService {
     }
 
     public List<Historico> findByUsuario(Usuario usuario) {
-        return historicoRepository.findByUsuarioOrderByDataDesc(usuario);
+        // Filtra apenas tarefas concluídas
+        return historicoRepository.findByUsuarioOrderByDataDesc(usuario).stream()
+                .filter(h -> h.getTarefa() != null && "CONCLUIDA".equalsIgnoreCase(h.getTarefa().getStatus()))
+                .collect(Collectors.toList());
     }
 
     public Map<String, Object> getProgressoDiario(Usuario usuario, LocalDate data) {
-        List<Historico> registros = historicoRepository.findByUsuarioAndData(usuario, data);
+        List<Historico> registros = historicoRepository.findByUsuarioAndData(usuario, data).stream()
+                .filter(h -> h.getTarefa() != null && "CONCLUIDA".equalsIgnoreCase(h.getTarefa().getStatus()))
+                .collect(Collectors.toList());
+
         int totalHoras = registros.stream()
-            .mapToInt(Historico::getTotalHoras)
-            .sum();
+                .mapToInt(Historico::getTotalHoras)
+                .sum();
 
         return Map.of(
-            "data", data,
-            "totalHoras", totalHoras,
-            "metaAtingida", totalHoras >= 8
-        );
+                "data", data,
+                "totalHoras", totalHoras,
+                "metaAtingida", totalHoras >= 8);
     }
 
     @Transactional
     public void registrarConclusaoSessao(SessaoPomodoro sessao) {
+        // Só registra histórico se a tarefa estiver concluída
+        if (!"CONCLUIDA".equalsIgnoreCase(sessao.getTarefa().getStatus())) {
+            return;
+        }
+
         Historico historico = new Historico();
         historico.setUsuario(sessao.getTarefa().getUsuario());
         historico.setTarefa(sessao.getTarefa());
         historico.setData(LocalDate.now());
 
-        int tempoAtivo = sessao.getDuracao();   // minutos
-        int tempoPausa = sessao.getPausas();   // minutos
-        int ciclos = sessao.getCiclos();           // número de ciclos
+        int tempoAtivo = sessao.getDuracao();
+        int tempoPausa = sessao.getPausas();
+        int ciclos = sessao.getCiclos();
 
         int duracaoTotalMin = (tempoAtivo + tempoPausa) * ciclos;
-        int totalHoras = Math.max(duracaoTotalMin / 60, 1);  // arredonda para no mínimo 1h
+        int totalHoras = Math.max(duracaoTotalMin / 60, 1);
 
         historico.setTotalHoras(totalHoras);
         historicoRepository.save(historico);
@@ -60,26 +71,25 @@ public class HistoricoService {
         LocalDate hoje = LocalDate.now();
         int mes = hoje.getMonthValue();
         int ano = hoje.getYear();
-        return historicoRepository.findByUsuarioAndMes(usuario, mes, ano);
+        return historicoRepository.findByUsuarioAndMes(usuario, mes, ano).stream()
+                .filter(h -> h.getTarefa() != null && "CONCLUIDA".equalsIgnoreCase(h.getTarefa().getStatus()))
+                .collect(Collectors.toList());
     }
 
     public Map<String, Object> getProgressoMensal(Usuario usuario) {
         List<Historico> registros = getHistoricoMensal(usuario);
 
         long tarefasConcluidas = registros.stream()
-            .filter(h -> h.getTarefa().getStatus().equalsIgnoreCase("CONCLUIDA"))
-            .map(h -> h.getTarefa().getId())
-            .distinct()
-            .count();
+                .map(h -> h.getTarefa().getId())
+                .distinct()
+                .count();
 
         int totalHoras = registros.stream()
-            .mapToInt(Historico::getTotalHoras)
-            .sum();
+                .mapToInt(Historico::getTotalHoras)
+                .sum();
 
         return Map.of(
-            "tarefasConcluidas", tarefasConcluidas,
-            "totalHoras", totalHoras
-        );
+                "tarefasConcluidas", tarefasConcluidas,
+                "totalHoras", totalHoras);
     }
-
 }

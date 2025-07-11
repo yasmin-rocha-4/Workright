@@ -20,8 +20,8 @@ public class TarefaService {
     private final HistoricoRepository historicoRepository;
 
     public TarefaService(TarefaRepository tarefaRepository,
-                         UsuarioAutenticadoProvider usuarioAutenticadoProvider,
-                         HistoricoRepository historicoRepository) {
+            UsuarioAutenticadoProvider usuarioAutenticadoProvider,
+            HistoricoRepository historicoRepository) {
         this.tarefaRepository = tarefaRepository;
         this.usuarioAutenticadoProvider = usuarioAutenticadoProvider;
         this.historicoRepository = historicoRepository;
@@ -44,47 +44,52 @@ public class TarefaService {
     }
 
     /**
-     * Salva a tarefa e, se for marcada como CONCLUIDA e ainda não estiver no histórico,
+     * Salva a tarefa e, se for marcada como CONCLUIDA e ainda não estiver no
+     * histórico,
      * registra um histórico com base nas sessões concluídas.
      */
     public void salvar(Tarefa novaTarefa) {
-        boolean tarefaConcluida = "CONCLUIDA".equalsIgnoreCase(novaTarefa.getStatus());
+        boolean marcandoComoConcluida = "CONCLUIDA".equalsIgnoreCase(novaTarefa.getStatus());
 
-        Tarefa tarefaOriginal = null;
+        Tarefa tarefaAntiga = null;
+
         if (novaTarefa.getId() != null) {
-            tarefaOriginal = tarefaRepository.findById(novaTarefa.getId()).orElse(null);
+            tarefaAntiga = tarefaRepository.findById(novaTarefa.getId()).orElse(null);
 
-            // força o carregamento das sessões da nova tarefa
-            novaTarefa = tarefaRepository.findById(novaTarefa.getId()).orElseThrow();
-            novaTarefa.getSessoes().size(); // força o Hibernate a carregar as sessões
+            Tarefa tarefaSalva = tarefaRepository.findById(novaTarefa.getId()).orElseThrow();
+            tarefaSalva.setTitulo(novaTarefa.getTitulo());
+            tarefaSalva.setDescricao(novaTarefa.getDescricao());
+            tarefaSalva.setStatus(novaTarefa.getStatus());
+            tarefaSalva.setPrazo(novaTarefa.getPrazo());
+
+            tarefaSalva.getSessoes().size(); // carrega sessões para o cálculo posterior
+            novaTarefa = tarefaSalva;
 
         }
 
-        boolean mudouParaConcluida = tarefaOriginal != null
-                && !"CONCLUIDA".equalsIgnoreCase(tarefaOriginal.getStatus())
-                && tarefaConcluida;
+        boolean mudouParaConcluida = tarefaAntiga != null
+                && !"CONCLUIDA".equalsIgnoreCase(tarefaAntiga.getStatus())
+                && marcandoComoConcluida;
 
         tarefaRepository.save(novaTarefa);
 
+        // Se mudou para concluída e ainda não há histórico, criar novo registro
         if (mudouParaConcluida && historicoRepository.findByTarefa(novaTarefa).isEmpty()) {
             Historico historico = new Historico();
             historico.setTarefa(novaTarefa);
             historico.setUsuario(novaTarefa.getUsuario());
             historico.setData(LocalDate.now());
 
-            //  Soma TODAS as sessões concluídas da tarefa
-            int totalMinutos = novaTarefa.getSessoes().stream()
+            // Soma tempo das sessões CONCLUÍDAS
+            int minutosTotais = novaTarefa.getSessoes().stream()
                     .filter(sessao -> "CONCLUIDA".equalsIgnoreCase(sessao.getStatus()))
-                    .mapToInt(sessao -> 
-                        (sessao.getDuracao() + sessao.getPausas()) * sessao.getCiclos()
-                    )
+                    .mapToInt(sessao -> (sessao.getDuracao() + sessao.getPausas()) * sessao.getCiclos())
                     .sum();
 
-            int totalHoras = Math.max(totalMinutos / 60, 1); // garante no mínimo 1 hora
-            historico.setTotalHoras(totalHoras);
+            int horasTotais = Math.max(minutosTotais / 60, 1);
+            historico.setTotalHoras(horasTotais);
 
             historicoRepository.save(historico);
         }
     }
-
 }
